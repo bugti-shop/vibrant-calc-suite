@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Menu } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { StickyNotes } from "@/components/StickyNotes";
 
 const HexCalculator = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -91,6 +92,8 @@ const HexCalculator = () => {
             <Button variant="calculator" size="calculator" onClick={() => handleNumber("F")} disabled={mode === "DEC"}>F</Button>
           </div>
         </Card>
+
+        <StickyNotes calculatorName="hex-calculator" />
       </main>
     </div>
   );

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Menu } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { StickyNotes } from "@/components/StickyNotes";
 
 const InvestmentCalculator = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -126,6 +127,8 @@ const InvestmentCalculator = () => {
             )}
           </div>
         </Card>
+
+        <StickyNotes calculatorName="investment-calculator" />
       </main>
     </div>
   );

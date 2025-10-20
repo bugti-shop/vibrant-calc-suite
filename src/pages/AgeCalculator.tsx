@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Menu } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { StickyNotes } from "@/components/StickyNotes";
 
 const AgeCalculator = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -101,6 +102,8 @@ const AgeCalculator = () => {
             )}
           </div>
         </Card>
+
+        <StickyNotes calculatorName="age-calculator" />
       </main>
     </div>
   );

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Menu } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { StickyNotes } from "@/components/StickyNotes";
 
 const PeriodCalculator = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -117,6 +118,8 @@ const PeriodCalculator = () => {
             )}
           </div>
         </Card>
+
+        <StickyNotes calculatorName="period-calculator" />
       </main>
     </div>
   );

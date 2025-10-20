@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Calculator, TrendingUp, Percent, DollarSign, Calendar, Star, Fuel, GraduationCap, Hash } from "lucide-react";
+import { Calculator, TrendingUp, Percent, DollarSign, Calendar, Star, Fuel, GraduationCap, Hash, Clock } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sheet,
@@ -57,6 +57,12 @@ const calculators: CalculatorItem[] = [
     name: "Fuel Cost Calculator",
     path: "/fuel-calculator",
     icon: Fuel,
+    category: "Daily Use"
+  },
+  {
+    name: "World Time Calculator",
+    path: "/world-time-calculator",
+    icon: Clock,
     category: "Daily Use"
   },
   {

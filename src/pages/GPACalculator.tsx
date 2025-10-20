@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Menu, Plus, Trash2 } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { StickyNotes } from "@/components/StickyNotes";
 
 interface Course {
   id: number;
@@ -139,6 +140,8 @@ const GPACalculator = () => {
             )}
           </div>
         </Card>
+
+        <StickyNotes calculatorName="gpa-calculator" />
       </main>
     </div>
   );

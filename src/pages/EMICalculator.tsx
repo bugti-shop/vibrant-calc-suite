@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Menu } from "lucide-react";
 import { AppSidebar } from "@/components/AppSidebar";
+import { StickyNotes } from "@/components/StickyNotes";
 
 const EMICalculator = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -107,6 +108,8 @@ const EMICalculator = () => {
             )}
           </div>
         </Card>
+
+        <StickyNotes calculatorName="emi-calculator" />
       </main>
     </div>
   );
