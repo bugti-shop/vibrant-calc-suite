@@ -10,6 +10,10 @@ import EMICalculator from "./pages/EMICalculator";
 import InterestCalculator from "./pages/InterestCalculator";
 import InvestmentCalculator from "./pages/InvestmentCalculator";
 import PeriodCalculator from "./pages/PeriodCalculator";
+import AgeCalculator from "./pages/AgeCalculator";
+import FuelCostCalculator from "./pages/FuelCostCalculator";
+import GPACalculator from "./pages/GPACalculator";
+import HexCalculator from "./pages/HexCalculator";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +30,10 @@ const App = () => (
           <Route path="/interest-calculator" element={<InterestCalculator />} />
           <Route path="/investment-calculator" element={<InvestmentCalculator />} />
           <Route path="/period-calculator" element={<PeriodCalculator />} />
+          <Route path="/age-calculator" element={<AgeCalculator />} />
+          <Route path="/fuel-calculator" element={<FuelCostCalculator />} />
+          <Route path="/gpa-calculator" element={<GPACalculator />} />
+          <Route path="/hex-calculator" element={<HexCalculator />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

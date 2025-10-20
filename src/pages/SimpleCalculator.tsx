@@ -11,6 +11,7 @@ interface SimpleCalculatorProps {
 const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [display, setDisplay] = useState("0");
+  const [expression, setExpression] = useState("");
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
   const [resetDisplay, setResetDisplay] = useState(false);
@@ -18,9 +19,14 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
   const handleNumber = (num: string) => {
     if (resetDisplay) {
       setDisplay(num);
+      setExpression(expression + num);
       setResetDisplay(false);
     } else {
-      setDisplay(display === "0" ? num : display + num);
+      const newDisplay = display === "0" ? num : display + num;
+      setDisplay(newDisplay);
+      if (!operation) {
+        setExpression(newDisplay);
+      }
     }
   };
 
@@ -28,10 +34,12 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
     const current = parseFloat(display);
     if (previousValue === null) {
       setPreviousValue(current);
+      setExpression(display + " " + op + " ");
     } else if (operation) {
       const result = calculate(previousValue, current, operation);
       setDisplay(String(result));
       setPreviousValue(result);
+      setExpression(expression + display + " " + op + " ");
     }
     setOperation(op);
     setResetDisplay(true);
@@ -56,6 +64,7 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
     if (previousValue !== null && operation) {
       const current = parseFloat(display);
       const result = calculate(previousValue, current, operation);
+      setExpression(expression + display + " = " + result);
       setDisplay(String(result));
       setPreviousValue(null);
       setOperation(null);
@@ -65,6 +74,7 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
 
   const handleClear = () => {
     setDisplay("0");
+    setExpression("");
     setPreviousValue(null);
     setOperation(null);
     setResetDisplay(false);
@@ -80,8 +90,9 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
     return (
       <div className="w-full">
         <Card className="p-4 md:p-6 max-w-md mx-auto">
-          <div className="bg-[hsl(var(--calc-display))] p-4 rounded-lg mb-4 text-right min-h-[80px] flex items-center justify-end">
-            <div className="text-3xl md:text-4xl font-bold break-all">{display}</div>
+          <div className="bg-[hsl(var(--calc-display))] p-4 rounded-lg mb-4 min-h-[100px] flex flex-col justify-between">
+            <div className="text-sm md:text-base text-muted-foreground text-right mb-2 min-h-[24px]">{expression || " "}</div>
+            <div className="text-3xl md:text-4xl font-bold break-all text-right">{display}</div>
           </div>
           
           <div className="grid grid-cols-4 gap-2">
@@ -138,8 +149,9 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
 
       <main className="max-w-4xl mx-auto p-4">
         <Card className="p-4 md:p-6 max-w-md mx-auto">
-          <div className="bg-[hsl(var(--calc-display))] p-4 rounded-lg mb-4 text-right min-h-[80px] flex items-center justify-end">
-            <div className="text-3xl md:text-4xl font-bold break-all">{display}</div>
+          <div className="bg-[hsl(var(--calc-display))] p-4 rounded-lg mb-4 min-h-[100px] flex flex-col justify-between">
+            <div className="text-sm md:text-base text-muted-foreground text-right mb-2 min-h-[24px]">{expression || " "}</div>
+            <div className="text-3xl md:text-4xl font-bold break-all text-right">{display}</div>
           </div>
           
           <div className="grid grid-cols-4 gap-2">
