@@ -186,78 +186,71 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
       <div className="grid grid-cols-4 gap-3">
         <Button 
           variant="ghost" 
-          size="calculator" 
           onClick={handleClear}
-          className="text-2xl font-semibold text-red-500 hover:text-red-600 hover:bg-red-50"
+          className="h-16 text-3xl font-semibold text-red-500 active:scale-95 transition-transform"
         >
           C
         </Button>
         <Button 
           variant="ghost" 
-          size="calculator" 
           onClick={handlePercentage}
-          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
         >
           %
         </Button>
         <Button 
           variant="ghost" 
-          size="calculator" 
           onClick={handleBackspace}
-          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
         >
           ⌫
         </Button>
         <Button 
           variant="ghost" 
-          size="calculator" 
           onClick={() => handleOperation("÷")}
-          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
         >
           ÷
         </Button>
         
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("7")} className="text-2xl font-semibold hover:bg-muted">7</Button>
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("8")} className="text-2xl font-semibold hover:bg-muted">8</Button>
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("9")} className="text-2xl font-semibold hover:bg-muted">9</Button>
+        <Button variant="ghost" onClick={() => handleNumber("7")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">7</Button>
+        <Button variant="ghost" onClick={() => handleNumber("8")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">8</Button>
+        <Button variant="ghost" onClick={() => handleNumber("9")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">9</Button>
         <Button 
           variant="ghost" 
-          size="calculator" 
           onClick={() => handleOperation("×")}
-          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
         >
           ×
         </Button>
         
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("4")} className="text-2xl font-semibold hover:bg-muted">4</Button>
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("5")} className="text-2xl font-semibold hover:bg-muted">5</Button>
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("6")} className="text-2xl font-semibold hover:bg-muted">6</Button>
+        <Button variant="ghost" onClick={() => handleNumber("4")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">4</Button>
+        <Button variant="ghost" onClick={() => handleNumber("5")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">5</Button>
+        <Button variant="ghost" onClick={() => handleNumber("6")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">6</Button>
         <Button 
           variant="ghost" 
-          size="calculator" 
           onClick={() => handleOperation("-")}
-          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
         >
           -
         </Button>
         
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("1")} className="text-2xl font-semibold hover:bg-muted">1</Button>
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("2")} className="text-2xl font-semibold hover:bg-muted">2</Button>
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("3")} className="text-2xl font-semibold hover:bg-muted">3</Button>
+        <Button variant="ghost" onClick={() => handleNumber("1")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">1</Button>
+        <Button variant="ghost" onClick={() => handleNumber("2")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">2</Button>
+        <Button variant="ghost" onClick={() => handleNumber("3")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">3</Button>
         <Button 
           variant="ghost" 
-          size="calculator" 
           onClick={() => handleOperation("+")}
-          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
         >
           +
         </Button>
         
-        <Button variant="ghost" size="calculator" onClick={() => handleNumber("0")} className="col-span-2 text-2xl font-semibold hover:bg-muted">0</Button>
-        <Button variant="ghost" size="calculator" onClick={handleDecimal} className="text-2xl font-semibold hover:bg-muted">.</Button>
+        <Button variant="ghost" onClick={() => handleNumber("0")} className="col-span-2 h-16 text-3xl font-semibold active:scale-95 transition-transform">0</Button>
+        <Button variant="ghost" onClick={handleDecimal} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">.</Button>
         <Button 
           onClick={handleEquals}
-          className="bg-green-600 hover:bg-green-700 text-white text-2xl font-bold rounded-2xl h-14"
+          className="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white text-3xl font-bold rounded-2xl h-16 active:scale-95 transition-all"
         >
           =
         </Button>
