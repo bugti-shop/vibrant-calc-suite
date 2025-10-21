@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Calculator, TrendingUp, Percent, DollarSign, Calendar, Star, Fuel, GraduationCap, Hash, Clock } from "lucide-react";
+import { Calculator, TrendingUp, Percent, DollarSign, Calendar, Star, Fuel, GraduationCap, Hash, Clock, Baby, Heart } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sheet,
@@ -75,6 +75,18 @@ const calculators: CalculatorItem[] = [
     name: "Women Periods Calculator",
     path: "/period-calculator",
     icon: Calendar,
+    category: "Health"
+  },
+  {
+    name: "Pregnancy Due Date Calculator",
+    path: "/pregnancy-calculator",
+    icon: Baby,
+    category: "Health"
+  },
+  {
+    name: "Heart Rate Target Zone Calculator",
+    path: "/target-zone-calculator",
+    icon: Heart,
     category: "Health"
   }
 ];

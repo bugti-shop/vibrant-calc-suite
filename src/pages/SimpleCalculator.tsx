@@ -23,22 +23,22 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
     <div className="min-h-screen bg-background">
       <AppSidebar open={sidebarOpen} onOpenChange={setSidebarOpen} />
       
-      <header className="bg-primary text-primary-foreground py-4 px-4 shadow-lg sticky top-0 z-40">
+      <header className="bg-white border-b py-4 px-4 shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setSidebarOpen(true)}
-            className="text-primary-foreground hover:bg-primary-foreground/10"
+            className="text-foreground"
           >
             <Menu className="h-6 w-6" />
           </Button>
-          <h1 className="text-xl md:text-2xl font-bold">Simple Calculator</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-foreground">Simple Calculator</h1>
           <Button
             onClick={addCalculator}
             size="sm"
             variant="outline"
-            className="ml-auto gap-2 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border-primary-foreground/20"
+            className="ml-auto gap-2"
           >
             <Plus className="h-4 w-4" />
             Add Calculator
@@ -187,70 +187,70 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
         <Button 
           variant="ghost" 
           onClick={handleClear}
-          className="h-16 text-3xl font-semibold text-red-500 active:scale-95 transition-transform"
+          className="h-16 text-3xl font-semibold text-red-500"
         >
           C
         </Button>
         <Button 
           variant="ghost" 
           onClick={handlePercentage}
-          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
+          className="h-16 w-full text-4xl font-semibold text-green-600"
         >
           %
         </Button>
         <Button 
           variant="ghost" 
           onClick={handleBackspace}
-          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
+          className="h-16 text-3xl font-semibold text-green-600"
         >
           ⌫
         </Button>
         <Button 
           variant="ghost" 
           onClick={() => handleOperation("÷")}
-          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
+          className="h-16 w-full text-4xl font-semibold text-green-600"
         >
           ÷
         </Button>
         
-        <Button variant="ghost" onClick={() => handleNumber("7")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">7</Button>
-        <Button variant="ghost" onClick={() => handleNumber("8")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">8</Button>
-        <Button variant="ghost" onClick={() => handleNumber("9")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">9</Button>
+        <Button variant="ghost" onClick={() => handleNumber("7")} className="h-16 text-3xl font-semibold">7</Button>
+        <Button variant="ghost" onClick={() => handleNumber("8")} className="h-16 text-3xl font-semibold">8</Button>
+        <Button variant="ghost" onClick={() => handleNumber("9")} className="h-16 text-3xl font-semibold">9</Button>
         <Button 
           variant="ghost" 
           onClick={() => handleOperation("×")}
-          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
+          className="h-16 w-full text-4xl font-semibold text-green-600"
         >
           ×
         </Button>
         
-        <Button variant="ghost" onClick={() => handleNumber("4")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">4</Button>
-        <Button variant="ghost" onClick={() => handleNumber("5")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">5</Button>
-        <Button variant="ghost" onClick={() => handleNumber("6")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">6</Button>
+        <Button variant="ghost" onClick={() => handleNumber("4")} className="h-16 text-3xl font-semibold">4</Button>
+        <Button variant="ghost" onClick={() => handleNumber("5")} className="h-16 text-3xl font-semibold">5</Button>
+        <Button variant="ghost" onClick={() => handleNumber("6")} className="h-16 text-3xl font-semibold">6</Button>
         <Button 
           variant="ghost" 
           onClick={() => handleOperation("-")}
-          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
+          className="h-16 w-full text-4xl font-semibold text-green-600"
         >
           -
         </Button>
         
-        <Button variant="ghost" onClick={() => handleNumber("1")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">1</Button>
-        <Button variant="ghost" onClick={() => handleNumber("2")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">2</Button>
-        <Button variant="ghost" onClick={() => handleNumber("3")} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">3</Button>
+        <Button variant="ghost" onClick={() => handleNumber("1")} className="h-16 text-3xl font-semibold">1</Button>
+        <Button variant="ghost" onClick={() => handleNumber("2")} className="h-16 text-3xl font-semibold">2</Button>
+        <Button variant="ghost" onClick={() => handleNumber("3")} className="h-16 text-3xl font-semibold">3</Button>
         <Button 
           variant="ghost" 
           onClick={() => handleOperation("+")}
-          className="h-16 text-3xl font-semibold text-green-600 active:scale-95 transition-transform"
+          className="h-16 w-full text-4xl font-semibold text-green-600"
         >
           +
         </Button>
         
-        <Button variant="ghost" onClick={() => handleNumber("0")} className="col-span-2 h-16 text-3xl font-semibold active:scale-95 transition-transform">0</Button>
-        <Button variant="ghost" onClick={handleDecimal} className="h-16 text-3xl font-semibold active:scale-95 transition-transform">.</Button>
+        <Button variant="ghost" onClick={() => handleNumber("0")} className="col-span-2 h-16 text-3xl font-semibold">0</Button>
+        <Button variant="ghost" onClick={handleDecimal} className="h-16 text-3xl font-semibold">.</Button>
         <Button 
           onClick={handleEquals}
-          className="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white text-3xl font-bold rounded-2xl h-16 active:scale-95 transition-all"
+          className="bg-green-600 text-white text-3xl font-bold rounded-2xl h-16"
         >
           =
         </Button>

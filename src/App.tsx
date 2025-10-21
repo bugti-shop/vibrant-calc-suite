@@ -15,6 +15,8 @@ import FuelCostCalculator from "./pages/FuelCostCalculator";
 import GPACalculator from "./pages/GPACalculator";
 import HexCalculator from "./pages/HexCalculator";
 import WorldTimeCalculator from "./pages/WorldTimeCalculator";
+import PregnancyCalculator from "./pages/PregnancyCalculator";
+import TargetZoneCalculator from "./pages/TargetZoneCalculator";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,8 @@ const App = () => (
           <Route path="/gpa-calculator" element={<GPACalculator />} />
           <Route path="/hex-calculator" element={<HexCalculator />} />
           <Route path="/world-time-calculator" element={<WorldTimeCalculator />} />
+          <Route path="/pregnancy-calculator" element={<PregnancyCalculator />} />
+          <Route path="/target-zone-calculator" element={<TargetZoneCalculator />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
