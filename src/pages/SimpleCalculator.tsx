@@ -60,42 +60,13 @@ const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
 };
 
 const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
-  const [display, setDisplay] = useState("0");
+  const [currentInput, setCurrentInput] = useState("0");
   const [expression, setExpression] = useState("");
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
-  const [resetDisplay, setResetDisplay] = useState(false);
+  const [result, setResult] = useState<string>("");
 
-  const handleNumber = (num: string) => {
-    if (resetDisplay) {
-      setDisplay(num);
-      setExpression(expression + num);
-      setResetDisplay(false);
-    } else {
-      const newDisplay = display === "0" ? num : display + num;
-      setDisplay(newDisplay);
-      if (!operation) {
-        setExpression(newDisplay);
-      }
-    }
-  };
-
-  const handleOperation = (op: string) => {
-    const current = parseFloat(display);
-    if (previousValue === null) {
-      setPreviousValue(current);
-      setExpression(display + " " + op + " ");
-    } else if (operation) {
-      const result = calculate(previousValue, current, operation);
-      setDisplay(String(result));
-      setPreviousValue(result);
-      setExpression(expression + display + " " + op + " ");
-    }
-    setOperation(op);
-    setResetDisplay(true);
-  };
-
-  const calculate = (prev: number, current: number, op: string): number => {
+  const calculateRealTime = (prev: number, current: number, op: string): number => {
     switch (op) {
       case "+":
         return prev + current;
@@ -104,73 +75,192 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
       case "×":
         return prev * current;
       case "÷":
-        return prev / current;
+        return current !== 0 ? prev / current : prev;
+      case "%":
+        return prev % current;
       default:
         return current;
     }
   };
 
+  const handleNumber = (num: string) => {
+    const newInput = currentInput === "0" ? num : currentInput + num;
+    setCurrentInput(newInput);
+    
+    // Update expression
+    if (operation && previousValue !== null) {
+      setExpression(`${previousValue}${operation}${newInput}`);
+      // Real-time calculation
+      const realTimeResult = calculateRealTime(previousValue, parseFloat(newInput), operation);
+      setResult(String(realTimeResult));
+    } else {
+      setExpression(newInput);
+      setResult(newInput);
+    }
+  };
+
+  const handleOperation = (op: string) => {
+    const current = parseFloat(currentInput);
+    
+    if (previousValue === null) {
+      setPreviousValue(current);
+      setExpression(`${current}${op}`);
+    } else if (operation) {
+      const calculated = calculateRealTime(previousValue, current, operation);
+      setPreviousValue(calculated);
+      setExpression(`${calculated}${op}`);
+      setResult(String(calculated));
+    }
+    
+    setOperation(op);
+    setCurrentInput("0");
+  };
+
   const handleEquals = () => {
     if (previousValue !== null && operation) {
-      const current = parseFloat(display);
-      const result = calculate(previousValue, current, operation);
-      setExpression(expression + display + " = " + result);
-      setDisplay(String(result));
+      const current = parseFloat(currentInput);
+      const finalResult = calculateRealTime(previousValue, current, operation);
+      setExpression(`${previousValue}${operation}${current}`);
+      setResult(String(finalResult));
+      setCurrentInput(String(finalResult));
       setPreviousValue(null);
       setOperation(null);
-      setResetDisplay(true);
     }
   };
 
   const handleClear = () => {
-    setDisplay("0");
+    setCurrentInput("0");
     setExpression("");
     setPreviousValue(null);
     setOperation(null);
-    setResetDisplay(false);
+    setResult("");
   };
 
   const handleDecimal = () => {
-    if (!display.includes(".")) {
-      setDisplay(display + ".");
+    if (!currentInput.includes(".")) {
+      const newInput = currentInput + ".";
+      setCurrentInput(newInput);
+      if (operation && previousValue !== null) {
+        setExpression(`${previousValue}${operation}${newInput}`);
+      } else {
+        setExpression(newInput);
+      }
     }
   };
 
+  const handleBackspace = () => {
+    const newInput = currentInput.length > 1 ? currentInput.slice(0, -1) : "0";
+    setCurrentInput(newInput);
+    
+    if (operation && previousValue !== null) {
+      setExpression(`${previousValue}${operation}${newInput}`);
+      if (newInput !== "0") {
+        const realTimeResult = calculateRealTime(previousValue, parseFloat(newInput), operation);
+        setResult(String(realTimeResult));
+      }
+    } else {
+      setExpression(newInput);
+      setResult(newInput);
+    }
+  };
+
+  const handlePercentage = () => {
+    const current = parseFloat(currentInput);
+    const percentValue = current / 100;
+    setCurrentInput(String(percentValue));
+    setExpression(String(percentValue));
+    setResult(String(percentValue));
+  };
+
   return (
-    <Card className="p-4 md:p-6 w-full">
-      <div className="bg-[hsl(var(--calc-display))] p-4 rounded-lg mb-4 min-h-[120px] flex flex-col justify-between">
-        <div className="text-lg md:text-xl font-bold text-foreground text-right mb-2 min-h-[28px]">{expression || " "}</div>
-        <div className="text-4xl md:text-5xl font-semibold break-all text-right">{display}</div>
+    <Card className="p-4 md:p-6 w-full bg-background">
+      <div className="bg-muted/30 p-6 rounded-xl mb-6 min-h-[140px] flex flex-col justify-end">
+        <div className="text-2xl md:text-3xl font-bold text-foreground text-right mb-2 min-h-[36px]">
+          {expression || "0"}
+        </div>
+        <div className="text-4xl md:text-6xl font-semibold text-muted-foreground text-right break-all">
+          {result || currentInput}
+        </div>
       </div>
       
-      <div className="grid grid-cols-4 gap-2">
-        <Button variant="calculator" size="calculator" onClick={handleClear} className="col-span-2">
+      <div className="grid grid-cols-4 gap-3">
+        <Button 
+          variant="ghost" 
+          size="calculator" 
+          onClick={handleClear}
+          className="text-2xl font-semibold text-red-500 hover:text-red-600 hover:bg-red-50"
+        >
           C
         </Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleOperation("÷")}>
+        <Button 
+          variant="ghost" 
+          size="calculator" 
+          onClick={handlePercentage}
+          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+        >
+          %
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="calculator" 
+          onClick={handleBackspace}
+          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+        >
+          ⌫
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="calculator" 
+          onClick={() => handleOperation("÷")}
+          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+        >
           ÷
         </Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleOperation("×")}>
+        
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("7")} className="text-2xl font-semibold hover:bg-muted">7</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("8")} className="text-2xl font-semibold hover:bg-muted">8</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("9")} className="text-2xl font-semibold hover:bg-muted">9</Button>
+        <Button 
+          variant="ghost" 
+          size="calculator" 
+          onClick={() => handleOperation("×")}
+          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+        >
           ×
         </Button>
         
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("7")}>7</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("8")}>8</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("9")}>9</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleOperation("-")}>-</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("4")} className="text-2xl font-semibold hover:bg-muted">4</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("5")} className="text-2xl font-semibold hover:bg-muted">5</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("6")} className="text-2xl font-semibold hover:bg-muted">6</Button>
+        <Button 
+          variant="ghost" 
+          size="calculator" 
+          onClick={() => handleOperation("-")}
+          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+        >
+          -
+        </Button>
         
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("4")}>4</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("5")}>5</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("6")}>6</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleOperation("+")}>+</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("1")} className="text-2xl font-semibold hover:bg-muted">1</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("2")} className="text-2xl font-semibold hover:bg-muted">2</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("3")} className="text-2xl font-semibold hover:bg-muted">3</Button>
+        <Button 
+          variant="ghost" 
+          size="calculator" 
+          onClick={() => handleOperation("+")}
+          className="text-2xl font-semibold text-green-600 hover:text-green-700 hover:bg-green-50"
+        >
+          +
+        </Button>
         
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("1")}>1</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("2")}>2</Button>
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("3")}>3</Button>
-        <Button variant="calculator" size="calculator" onClick={handleEquals} className="row-span-2">=</Button>
-        
-        <Button variant="calculator" size="calculator" onClick={() => handleNumber("0")} className="col-span-2">0</Button>
-        <Button variant="calculator" size="calculator" onClick={handleDecimal}>.</Button>
+        <Button variant="ghost" size="calculator" onClick={() => handleNumber("0")} className="col-span-2 text-2xl font-semibold hover:bg-muted">0</Button>
+        <Button variant="ghost" size="calculator" onClick={handleDecimal} className="text-2xl font-semibold hover:bg-muted">.</Button>
+        <Button 
+          onClick={handleEquals}
+          className="bg-green-600 hover:bg-green-700 text-white text-2xl font-bold rounded-2xl h-14"
+        >
+          =
+        </Button>
       </div>
     </Card>
   );
