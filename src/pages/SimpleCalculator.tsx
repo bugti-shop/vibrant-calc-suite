@@ -1,70 +1,18 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Menu, Plus } from "lucide-react";
-import { AppSidebar } from "@/components/AppSidebar";
-import { StickyNotes } from "@/components/StickyNotes";
+import { Copy } from "lucide-react";
 
-interface SimpleCalculatorProps {
-  embedded?: boolean;
-}
-
-const SimpleCalculator = ({ embedded = false }: SimpleCalculatorProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [calculators, setCalculators] = useState([{ id: 1 }]);
-  
-  const addCalculator = () => {
-    setCalculators([...calculators, { id: Date.now() }]);
-  };
-
-  return embedded ? (
-    <CalculatorInstance embedded />
-  ) : (
-    <div className="min-h-screen bg-background">
-      <AppSidebar open={sidebarOpen} onOpenChange={setSidebarOpen} />
-      
-      <header className="bg-white border-b py-4 px-4 shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSidebarOpen(true)}
-            className="text-foreground"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-          <h1 className="text-xl md:text-2xl font-bold text-foreground">Simple Calculator</h1>
-          <Button
-            onClick={addCalculator}
-            size="sm"
-            variant="outline"
-            className="ml-auto gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Add Calculator
-          </Button>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto p-4">
-        <div className={`grid gap-6 ${calculators.length > 1 ? 'md:grid-cols-2 lg:grid-cols-3' : 'max-w-4xl mx-auto'}`}>
-          {calculators.map((calc) => (
-            <CalculatorInstance key={calc.id} />
-          ))}
-        </div>
-        
-        <StickyNotes calculatorName="simple-calculator" />
-      </main>
-    </div>
-  );
-};
-
-const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
+const SimpleCalculator = () => {
   const [currentInput, setCurrentInput] = useState("0");
   const [expression, setExpression] = useState("");
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
   const [result, setResult] = useState<string>("");
+
+  const vibrate = () => {
+    if (navigator.vibrate) {
+      navigator.vibrate(10);
+    }
+  };
 
   const calculateRealTime = (prev: number, current: number, op: string): number => {
     switch (op) {
@@ -84,6 +32,7 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
   };
 
   const handleNumber = (num: string) => {
+    vibrate();
     const newInput = currentInput === "0" ? num : currentInput + num;
     setCurrentInput(newInput);
     
@@ -100,6 +49,7 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
   };
 
   const handleOperation = (op: string) => {
+    vibrate();
     const current = parseFloat(currentInput);
     
     if (previousValue === null) {
@@ -117,6 +67,7 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
   };
 
   const handleEquals = () => {
+    vibrate();
     if (previousValue !== null && operation) {
       const current = parseFloat(currentInput);
       const finalResult = calculateRealTime(previousValue, current, operation);
@@ -129,6 +80,7 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
   };
 
   const handleClear = () => {
+    vibrate();
     setCurrentInput("0");
     setExpression("");
     setPreviousValue(null);
@@ -137,6 +89,7 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
   };
 
   const handleDecimal = () => {
+    vibrate();
     if (!currentInput.includes(".")) {
       const newInput = currentInput + ".";
       setCurrentInput(newInput);
@@ -149,6 +102,7 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
   };
 
   const handleBackspace = () => {
+    vibrate();
     const newInput = currentInput.length > 1 ? currentInput.slice(0, -1) : "0";
     setCurrentInput(newInput);
     
@@ -165,6 +119,7 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
   };
 
   const handlePercentage = () => {
+    vibrate();
     const current = parseFloat(currentInput);
     const percentValue = current / 100;
     setCurrentInput(String(percentValue));
@@ -172,90 +127,88 @@ const CalculatorInstance = ({ embedded = false }: SimpleCalculatorProps) => {
     setResult(String(percentValue));
   };
 
+  const handleCopy = () => {
+    vibrate();
+    navigator.clipboard.writeText(result || currentInput);
+  };
+
+  const CalcButton = ({ 
+    onClick, 
+    children, 
+    className = "", 
+    variant = "default" 
+  }: { 
+    onClick: () => void; 
+    children: React.ReactNode; 
+    className?: string;
+    variant?: "default" | "operator" | "clear" | "equals";
+  }) => {
+    const baseStyle = "h-20 text-4xl font-semibold rounded-2xl transition-all duration-100 active:scale-95 shadow-[0_4px_0_0_rgba(0,0,0,0.1)] active:shadow-[0_2px_0_0_rgba(0,0,0,0.1)] active:translate-y-[2px]";
+    
+    const variantStyles = {
+      default: "bg-white text-gray-900 hover:bg-gray-50",
+      operator: "bg-emerald-500 text-white hover:bg-emerald-600",
+      clear: "bg-white text-red-500 hover:bg-gray-50",
+      equals: "bg-emerald-500 text-white hover:bg-emerald-600 rounded-3xl"
+    };
+
+    return (
+      <button
+        onClick={onClick}
+        className={`${baseStyle} ${variantStyles[variant]} ${className}`}
+      >
+        {children}
+      </button>
+    );
+  };
+
   return (
-    <Card className="p-4 md:p-6 w-full bg-background">
-      <div className="bg-muted/30 p-6 rounded-xl mb-6 min-h-[140px] flex flex-col justify-end">
-        <div className="text-2xl md:text-3xl font-bold text-foreground text-right mb-2 min-h-[36px]">
-          {expression || "0"}
-        </div>
-        <div className="text-4xl md:text-6xl font-semibold text-muted-foreground text-right break-all">
-          {result || currentInput}
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Display Area */}
+      <div className="flex-1 flex flex-col justify-end p-6 pb-8">
+        <div className="text-right">
+          <div className="text-3xl text-gray-600 mb-2 min-h-[40px] flex items-center justify-end">
+            {expression || "0"}
+            <span className="inline-block w-1 h-10 bg-emerald-500 ml-1 animate-pulse"></span>
+          </div>
+          <div className="text-6xl font-light text-gray-800 break-all">
+            {result || currentInput}
+          </div>
         </div>
       </div>
       
-      <div className="grid grid-cols-4 gap-3">
-        <Button 
-          variant="ghost" 
-          onClick={handleClear}
-          className="h-16 text-3xl font-semibold text-red-500"
-        >
-          C
-        </Button>
-        <Button 
-          variant="ghost" 
-          onClick={handlePercentage}
-          className="h-16 w-full text-4xl font-semibold text-green-600"
-        >
-          %
-        </Button>
-        <Button 
-          variant="ghost" 
-          onClick={handleBackspace}
-          className="h-16 text-3xl font-semibold text-green-600"
-        >
-          ⌫
-        </Button>
-        <Button 
-          variant="ghost" 
-          onClick={() => handleOperation("÷")}
-          className="h-16 w-full text-4xl font-semibold text-green-600"
-        >
-          ÷
-        </Button>
-        
-        <Button variant="ghost" onClick={() => handleNumber("7")} className="h-16 text-3xl font-semibold">7</Button>
-        <Button variant="ghost" onClick={() => handleNumber("8")} className="h-16 text-3xl font-semibold">8</Button>
-        <Button variant="ghost" onClick={() => handleNumber("9")} className="h-16 text-3xl font-semibold">9</Button>
-        <Button 
-          variant="ghost" 
-          onClick={() => handleOperation("×")}
-          className="h-16 w-full text-4xl font-semibold text-green-600"
-        >
-          ×
-        </Button>
-        
-        <Button variant="ghost" onClick={() => handleNumber("4")} className="h-16 text-3xl font-semibold">4</Button>
-        <Button variant="ghost" onClick={() => handleNumber("5")} className="h-16 text-3xl font-semibold">5</Button>
-        <Button variant="ghost" onClick={() => handleNumber("6")} className="h-16 text-3xl font-semibold">6</Button>
-        <Button 
-          variant="ghost" 
-          onClick={() => handleOperation("-")}
-          className="h-16 w-full text-4xl font-semibold text-green-600"
-        >
-          -
-        </Button>
-        
-        <Button variant="ghost" onClick={() => handleNumber("1")} className="h-16 text-3xl font-semibold">1</Button>
-        <Button variant="ghost" onClick={() => handleNumber("2")} className="h-16 text-3xl font-semibold">2</Button>
-        <Button variant="ghost" onClick={() => handleNumber("3")} className="h-16 text-3xl font-semibold">3</Button>
-        <Button 
-          variant="ghost" 
-          onClick={() => handleOperation("+")}
-          className="h-16 w-full text-4xl font-semibold text-green-600"
-        >
-          +
-        </Button>
-        
-        <Button variant="ghost" onClick={() => handleNumber("0")} className="col-span-2 h-16 text-3xl font-semibold">0</Button>
-        <Button variant="ghost" onClick={handleDecimal} className="h-16 text-3xl font-semibold">.</Button>
-        <Button 
-          onClick={handleEquals}
-          className="bg-green-600 text-white text-3xl font-bold rounded-2xl h-16"
-        >
-          =
-        </Button>
+      {/* Button Grid */}
+      <div className="p-4 pb-8">
+        <div className="grid grid-cols-4 gap-3 max-w-md mx-auto">
+          <CalcButton onClick={handleClear} variant="clear">C</CalcButton>
+          <CalcButton onClick={handlePercentage} variant="operator">%</CalcButton>
+          <CalcButton onClick={handleBackspace} variant="operator">⌫</CalcButton>
+          <CalcButton onClick={() => handleOperation("÷")} variant="operator">÷</CalcButton>
+          
+          <CalcButton onClick={() => handleNumber("7")}>7</CalcButton>
+          <CalcButton onClick={() => handleNumber("8")}>8</CalcButton>
+          <CalcButton onClick={() => handleNumber("9")}>9</CalcButton>
+          <CalcButton onClick={() => handleOperation("×")} variant="operator">×</CalcButton>
+          
+          <CalcButton onClick={() => handleNumber("4")}>4</CalcButton>
+          <CalcButton onClick={() => handleNumber("5")}>5</CalcButton>
+          <CalcButton onClick={() => handleNumber("6")}>6</CalcButton>
+          <CalcButton onClick={() => handleOperation("-")} variant="operator">-</CalcButton>
+          
+          <CalcButton onClick={() => handleNumber("1")}>1</CalcButton>
+          <CalcButton onClick={() => handleNumber("2")}>2</CalcButton>
+          <CalcButton onClick={() => handleNumber("3")}>3</CalcButton>
+          <CalcButton onClick={() => handleOperation("+")} variant="operator">+</CalcButton>
+          
+          <CalcButton onClick={handleCopy} variant="operator" className="flex items-center justify-center">
+            <Copy className="h-8 w-8" />
+          </CalcButton>
+          <CalcButton onClick={() => handleNumber("0")} className="col-span-2">0</CalcButton>
+          <CalcButton onClick={handleDecimal}>.</CalcButton>
+          <CalcButton onClick={handleEquals} variant="equals" className="row-span-1">=</CalcButton>
+        </div>
       </div>
-    </Card>
+    </div>
   );
 };
 
